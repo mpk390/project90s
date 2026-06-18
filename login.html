@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Project 90's Games</title>
+  
+<style>
+  :root{
+    --black:#050510; --dark-purple:#120024; --neon-purple:#9B2CFF; --hot-pink:#FF1493;
+    --cyan:#00AEEF; --yellow:#FFD400; --white:#F5F5FF; --muted:#B8A7D9;
+    --panel:rgba(10,8,28,.82); --line:rgba(155,44,255,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    min-height:100vh;background:var(--black);color:var(--white);
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    display:grid;place-items:center;padding:22px;
+    background-image:
+      radial-gradient(circle at 50% -12%,rgba(155,44,255,.42),transparent 38%),
+      radial-gradient(circle at 8% 28%,rgba(255,20,147,.18),transparent 25%),
+      radial-gradient(circle at 92% 22%,rgba(0,174,239,.2),transparent 25%),
+      linear-gradient(180deg,#050510 0%,#120024 58%,#050510 100%);
+  }
+  .pixel{font-family:"Courier New",monospace;font-weight:900;letter-spacing:.5px;text-transform:uppercase}
+  .auth-card{
+    width:min(440px,100%);border:1px solid var(--line);border-radius:18px;
+    background:var(--panel);box-shadow:0 0 35px rgba(155,44,255,.25);padding:26px;
+  }
+  .logo{display:block;width:min(260px,100%);margin:0 auto 20px;filter:drop-shadow(0 0 18px rgba(255,20,147,.38))}
+  h1{text-align:center;color:var(--yellow);font-size:25px;margin-bottom:8px}
+  p{text-align:center;color:var(--muted);margin-bottom:20px}
+  label{display:block;margin:13px 0 6px;color:var(--white);font-weight:800}
+  input{
+    width:100%;height:46px;border:1px solid var(--line);border-radius:10px;
+    background:rgba(5,5,16,.82);color:var(--white);padding:0 14px;font-size:15px;outline:none;
+  }
+  input:focus{border-color:var(--cyan);box-shadow:0 0 14px rgba(0,174,239,.35)}
+  button,.link-btn{
+    width:100%;min-height:46px;border-radius:10px;border:1px solid var(--line);
+    color:var(--white);font-weight:1000;cursor:pointer;margin-top:14px;text-decoration:none;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .primary{background:var(--yellow);color:#170b21;border-color:var(--yellow)}
+  .google{background:rgba(255,255,255,.06)}
+  .google:hover{border-color:var(--cyan)}
+  .switch{margin-top:18px;text-align:center;color:var(--muted)}
+  .switch a{color:var(--yellow);font-weight:900;text-decoration:none}
+  .back{margin-top:14px;text-align:center}
+  .back a{color:var(--cyan);text-decoration:none}
+  .msg{margin-top:14px;text-align:center;color:var(--yellow);min-height:22px}
+</style>
+
+</head>
+<body>
+  <main class="auth-card">
+    <img class="logo" src="project90-logo.png" alt="Project 90's Games logo">
+    <h1 class="pixel">Login</h1>
+    <p>Login with Google or your email.</p>
+
+    <button id="googleLogin" class="google pixel" type="button">🔵 Continue with Google</button>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" required autocomplete="email">
+
+      <label for="password">Password</label>
+      <input id="password" type="password" required autocomplete="current-password">
+
+      <button class="primary pixel" type="submit">Login</button>
+    </form>
+
+    <div id="message" class="msg"></div>
+
+    <div class="switch">No account? <a href="signup.html">Sign up</a></div>
+    <div class="back"><a href="index.html">← Back to Home</a></div>
+  </main>
+  
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import {
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  const provider = new GoogleAuthProvider();
+  const msg = document.getElementById("message");
+
+  function showMessage(text) {
+    msg.textContent = text;
+  }
+
+  async function goAfterLogin(user) {
+    const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+    window.location.href = profileSnap.exists() ? "index.html" : "profile-setup.html";
+  }
+
+  document.getElementById("googleLogin").addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      await goAfterLogin(result.user);
+    } catch (error) {
+      showMessage(error.message);
+    }
+  });
+
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      await goAfterLogin(result.user);
+    } catch (error) {
+      showMessage(error.message);
+    }
+  });
+</script>
+
+</body>
+</html>
