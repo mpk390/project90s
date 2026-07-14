@@ -1,8 +1,0 @@
-import * as THREE from 'three';
-export class Effects {
-  constructor(scene){this.scene=scene;this.reduced=false;this.particles=[];this.speedLines=this.#speedLines();scene.add(this.speedLines);}
-  #speedLines(){const g=new THREE.BufferGeometry(),p=[];for(let i=0;i<90;i++)p.push((Math.random()-.5)*16,Math.random()*8+1,-Math.random()*80);g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));const m=new THREE.PointsMaterial({color:0xffc15a,size:.035,transparent:true,opacity:.0});return new THREE.Points(g,m);}
-  setReduced(v){this.reduced=v;this.speedLines.visible=!v;}
-  update(dt,speed){if(this.speedLines.visible){this.speedLines.material.opacity=THREE.MathUtils.clamp((speed-18)/40,0,.55);const a=this.speedLines.geometry.attributes.position;for(let i=0;i<a.count;i++){let z=a.getZ(i)+speed*dt*1.7;if(z>8)z=-80;a.setZ(i,z);}a.needsUpdate=true;}for(let i=this.particles.length-1;i>=0;i--){const p=this.particles[i];p.life-=dt;p.mesh.position.addScaledVector(p.v,dt);p.mesh.scale.multiplyScalar(.96);p.mesh.material.opacity=Math.max(0,p.life/.6);if(p.life<=0){this.scene.remove(p.mesh);p.mesh.geometry.dispose();p.mesh.material.dispose();this.particles.splice(i,1);}}}
-  burst(pos,color=0xff7b00,count=18){if(this.reduced)count=6;for(let i=0;i<count;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.05,5,4),new THREE.MeshBasicMaterial({color,transparent:true}));m.position.copy(pos);this.scene.add(m);this.particles.push({mesh:m,v:new THREE.Vector3((Math.random()-.5)*6,Math.random()*5,(Math.random()-.5)*6),life:.6});}}
-}
