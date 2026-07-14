@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#080b10" />
+  <meta name="description" content="Fuel Rush 3D - a client-side Three.js endless runner for GitHub Pages." />
+  <title>Fuel Rush 3D</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game-canvas" aria-label="Fuel Rush 3D game canvas"></canvas>
+
+    <div id="loading-screen" class="screen active">
+      <div class="loader-card">
+        <div class="brand-mark">FR</div>
+        <h1>Fuel Rush 3D</h1>
+        <p id="loading-text">Preparing the fuel lane...</p>
+        <div class="progress"><span id="loading-progress"></span></div>
+      </div>
+    </div>
+
+    <header id="hud" class="hidden">
+      <div class="hud-card left"><small>SCORE</small><strong id="score">0</strong><span id="distance">0 m</span></div>
+      <button id="pause-btn" class="icon-btn" aria-label="Pause">Ⅱ</button>
+      <div class="hud-card right"><small>COINS</small><strong id="coins">0</strong><span id="multiplier">x1</span></div>
+    </header>
+
+    <div id="powerup-bar"></div>
+
+    <section id="main-menu" class="screen">
+      <div class="menu-card">
+        <div class="eyebrow">INDUSTRIAL ENDLESS RUNNER</div>
+        <h1>Fuel Rush <span>3D</span></h1>
+        <p>Race through a modern fuel terminal. Dodge industrial hazards, collect energy, and keep moving.</p>
+        <button id="play-btn" class="primary-btn">Start Run</button>
+        <div class="menu-row">
+          <button id="settings-btn" class="secondary-btn">Settings</button>
+          <button id="fullscreen-btn" class="secondary-btn">Fullscreen</button>
+        </div>
+        <div class="controls-hint">A / D or ← / → · Space / ↑ · S / ↓ · Swipe on mobile</div>
+      </div>
+    </section>
+
+    <section id="pause-menu" class="screen">
+      <div class="menu-card compact">
+        <div class="eyebrow">RUN PAUSED</div>
+        <h2>Take a breather</h2>
+        <button id="resume-btn" class="primary-btn">Resume</button>
+        <button id="pause-restart-btn" class="secondary-btn">Restart</button>
+        <button id="pause-main-btn" class="secondary-btn">Main Menu</button>
+      </div>
+    </section>
+
+    <section id="game-over" class="screen">
+      <div class="menu-card compact">
+        <div class="eyebrow danger">RUN ENDED</div>
+        <h2>Impact detected</h2>
+        <div class="result-grid">
+          <div><small>SCORE</small><strong id="final-score">0</strong></div>
+          <div><small>DISTANCE</small><strong id="final-distance">0 m</strong></div>
+          <div><small>COINS</small><strong id="final-coins">0</strong></div>
+          <div><small>BEST</small><strong id="high-score">0</strong></div>
+        </div>
+        <button id="restart-btn" class="primary-btn">Run Again</button>
+        <button id="gameover-main-btn" class="secondary-btn">Main Menu</button>
+      </div>
+    </section>
+
+    <section id="settings-menu" class="screen">
+      <div class="menu-card compact">
+        <div class="eyebrow">SETTINGS</div>
+        <h2>Game options</h2>
+        <label class="setting-row"><span>Music</span><input id="music-toggle" type="checkbox" checked /><i></i></label>
+        <label class="setting-row"><span>Sound effects</span><input id="sound-toggle" type="checkbox" checked /><i></i></label>
+        <label class="setting-row"><span>Reduced effects</span><input id="effects-toggle" type="checkbox" /><i></i></label>
+        <button id="settings-back-btn" class="primary-btn">Back</button>
+      </div>
+    </section>
+
+    <div id="orientation-note">Rotate your device for a wider view</div>
+    <div id="toast" role="status"></div>
+  </div>
+  <script src="loader.js?v=4"></script>
+  <script src="player.js?v=4"></script>
+  <script src="audio.js?v=4"></script>
+  <script src="controls.js?v=4"></script>
+  <script src="effects.js?v=4"></script>
+  <script src="scene.js?v=4"></script>
+  <script src="ui.js?v=4"></script>
+  <script src="game.js?v=4"></script>
+  <script src="main.js?v=4"></script>
+</body>
+</html>
